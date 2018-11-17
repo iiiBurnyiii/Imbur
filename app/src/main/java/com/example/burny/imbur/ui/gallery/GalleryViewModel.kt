@@ -1,6 +1,6 @@
 package com.example.burny.imbur.ui.gallery
 
-import androidx.databinding.ObservableField
+import androidx.databinding.ObservableBoolean
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.burny.imbur.data.Album
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class GalleryViewModel @Inject constructor (val repository: GalleryRepository) : ViewModel() {
 
-    val isLoading = ObservableField(false)
+    val isLoading = ObservableBoolean(false)
     var gallery = MutableLiveData<ArrayList<Album>>()
 
     private var disposable = CompositeDisposable()
@@ -40,8 +40,22 @@ class GalleryViewModel @Inject constructor (val repository: GalleryRepository) :
                 }))
     }
 
+    fun reloadGallery() {
+        clearGallery()
+        loadGallery()
+    }
+
+    private fun clearGallery() {
+        gallery.value = null
+    }
+
     override fun onCleared() {
-        if (!disposable.isDisposed) disposable.dispose()
+
+        if (!disposable.isDisposed) {
+            clearGallery()
+            disposable.dispose()
+        }
+
         super.onCleared()
     }
 

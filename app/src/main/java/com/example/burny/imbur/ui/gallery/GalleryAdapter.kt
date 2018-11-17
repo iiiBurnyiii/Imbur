@@ -11,14 +11,11 @@ import com.example.burny.imbur.databinding.GalleryItemBinding
 
 class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>() {
 
-    private val items = arrayListOf<Album>()
+    private var items = arrayListOf<Album>()
     private val set = ConstraintSet()
 
     fun replaceData(data: ArrayList<Album>) {
-        with(items) {
-            clear()
-            addAll(data)
-        }
+        items = data
         notifyDataSetChanged()
     }
 

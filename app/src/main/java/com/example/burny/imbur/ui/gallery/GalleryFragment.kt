@@ -34,6 +34,12 @@ class GalleryFragment : DaggerFragment() {
         val viewModel = ViewModelProviders.of(this, factory)[GalleryViewModel::class.java]
         binding.viewModel = viewModel
         binding.executePendingBindings()
+        bindAdapter(viewModel)
+        viewModel.loadGallery()
+
+    }
+
+    private fun bindAdapter(viewModel: GalleryViewModel) {
 
         binding.rvGallery.layoutManager = StaggeredGridLayoutManager(2, 1)
         binding.rvGallery.adapter = adapter
@@ -44,7 +50,7 @@ class GalleryFragment : DaggerFragment() {
 
     companion object {
 
-        fun newInstance(): GalleryFragment = GalleryFragment()
+        fun newInstance() = GalleryFragment()
 
     }
 

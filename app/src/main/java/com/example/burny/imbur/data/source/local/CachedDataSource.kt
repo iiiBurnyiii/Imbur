@@ -1,13 +1,14 @@
-package com.example.burny.imbur.data.source
+package com.example.burny.imbur.data.source.local
 
 import com.example.burny.imbur.data.Album
+import com.example.burny.imbur.data.source.DataSource
 import io.reactivex.Observable
 
 class CachedDataSource : DataSource {
 
-    private val cache = ArrayList<Album>()
-
     override fun getGallery(): Observable<ArrayList<Album>> {
+        val cache = ArrayList<Album>()
+
         with(cache){
             add(Album("1", title = "Album Title", coverId = "https://i.imgur.com/FYrcEMe.jpg", coverWidth = 4939, coverHeight = 4940, points = 300))
             add(Album("2", title = "Album Title", coverId = "https://i.imgur.com/sq3KgEt.jpg", coverWidth = 1481, coverHeight = 1481, points = 50000))

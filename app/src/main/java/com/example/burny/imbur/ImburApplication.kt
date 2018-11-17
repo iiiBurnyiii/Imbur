@@ -1,21 +1,14 @@
 package com.example.burny.imbur
 
-import android.app.Activity
-import android.app.Application
 import androidx.databinding.DataBindingUtil
 import com.example.burny.imbur.bindingAdapters.DaggerBindingComponent
 import com.example.burny.imbur.di.DaggerAppComponent
 import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
-import javax.inject.Inject
+import dagger.android.DaggerApplication
 
-class ImburApplication : Application(), HasActivityInjector {
+class ImburApplication : DaggerApplication() {
 
-    @Inject lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
-
-    override fun onCreate() {
-        super.onCreate()
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
 
         val appComponent = DaggerAppComponent.create()
         appComponent.inject(this)
@@ -25,9 +18,7 @@ class ImburApplication : Application(), HasActivityInjector {
                 .build()
         DataBindingUtil.setDefaultComponent(bindingComponent)
 
+        return appComponent
     }
-
-    override fun activityInjector(): AndroidInjector<Activity> =
-            dispatchingAndroidInjector
 
 }

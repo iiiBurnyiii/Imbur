@@ -1,6 +1,7 @@
 package com.example.burny.imbur.data.source
 
 import com.example.burny.imbur.data.Album
+import com.example.burny.imbur.data.source.local.CachedDataSource
 import io.reactivex.Observable
 import javax.inject.Inject
 
