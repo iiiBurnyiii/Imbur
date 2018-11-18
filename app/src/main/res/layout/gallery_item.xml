@@ -30,7 +30,7 @@
                 android:layout_height="0dp"
                 android:maxHeight="100dp"
                 android:scaleType="centerCrop"
-                app:imgUrl="@{album.coverId}"
+                app:imgUrl="@{album.getCoverUrl()}"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

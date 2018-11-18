@@ -5,11 +5,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class GalleryModule {
-
-    @Provides
-    @Scopes.GalleryScope
-    fun provideGalleryFragment(): GalleryFragment = GalleryFragment()
+class GalleryAdapterModule {
 
     @Provides
     @Scopes.GalleryScope

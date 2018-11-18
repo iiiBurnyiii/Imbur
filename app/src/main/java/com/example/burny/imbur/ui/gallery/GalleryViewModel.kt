@@ -21,7 +21,7 @@ class GalleryViewModel @Inject constructor (val repository: GalleryRepository) :
     fun loadGallery() {
         isLoading.set(true)
         disposable.add( repository.getGallery()
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith( object : DisposableObserver<ArrayList<Album>>() {
 

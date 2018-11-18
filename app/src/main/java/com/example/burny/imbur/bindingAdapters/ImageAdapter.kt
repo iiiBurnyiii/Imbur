@@ -8,7 +8,7 @@ import javax.inject.Inject
 
 class ImageAdapter @Inject constructor(val picasso: Picasso) {
 
-
+    //Заменить Picasso на Glide
     @BindingAdapter("imgUrl")
     fun setImage(iv: ImageView, url: String?) =
             picasso.load(url)

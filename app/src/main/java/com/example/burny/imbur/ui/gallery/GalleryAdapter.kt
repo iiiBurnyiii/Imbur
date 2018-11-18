@@ -30,7 +30,7 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>() 
 
         with(set){
             clone(holder.layout)
-            setDimensionRatio(holder.img.id, item.coverRatio)
+            setDimensionRatio(holder.img.id, item.getCoverRatio())
             applyTo(holder.layout)
         }
 
