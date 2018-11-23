@@ -29,7 +29,6 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:maxHeight="100dp"
-                android:scaleType="centerCrop"
                 app:imgUrl="@{album.getCoverUrl()}"
                 app:layout_constraintDimensionRatio="1:1"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,17 +37,19 @@
 
             <TextView
                 android:id="@+id/tvTitle"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
+                android:layout_marginStart="6dp"
                 android:layout_marginBottom="4dp"
                 android:fontFamily="@font/roboto"
-                app:title="@{album.title}"
+                android:paddingStart="2dp"
+                android:paddingEnd="2dp"
+                android:textAlignment="textStart"
                 android:textColor="@android:color/primary_text_light"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imgSource" />
+                app:layout_constraintTop_toBottomOf="@+id/imgSource"
+                app:title="@{album.title}" />
 
             <TextView
                 android:id="@+id/tvPoints"

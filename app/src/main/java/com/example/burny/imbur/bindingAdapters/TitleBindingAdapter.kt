@@ -3,13 +3,13 @@ package com.example.burny.imbur.bindingAdapters
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 
-class TitleAdapter {
+class TitleBindingAdapter {
 
     @BindingAdapter("title")
-    fun setTrimTitle(tv: TextView, title: String) {
-        tv.text = when (title.length <= 70) {
+    fun TextView.setTrimTitle(title: String) {
+        this.text = when (title.length <= 60) {
             true -> title
-            false -> title.take(67) + "..."
+            false -> title.take(57) + "..."
         }
     }
 

@@ -10,7 +10,8 @@ import dagger.Component
     BindingModule::class])
 interface BindingComponent : DataBindingComponent {
 
-    override fun getImageAdapter(): ImageAdapter
-    override fun getTitleAdapter(): TitleAdapter
+    override fun getImageBindingAdapter(): ImageBindingAdapter
+    override fun getListBindingAdapter(): ListBindingAdapter
+    override fun getTitleBindingAdapter(): TitleBindingAdapter
 
 }

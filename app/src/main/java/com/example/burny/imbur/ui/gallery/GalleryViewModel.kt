@@ -1,58 +1,46 @@
 package com.example.burny.imbur.ui.gallery
 
+import android.util.Log
+import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.burny.imbur.data.Album
 import com.example.burny.imbur.data.source.GalleryRepository
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.observers.DisposableObserver
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class GalleryViewModel @Inject constructor (val repository: GalleryRepository) : ViewModel() {
 
     val isLoading = ObservableBoolean(false)
-    var gallery = MutableLiveData<ArrayList<Album>>()
+    var gallery = ObservableArrayList<Album>()
 
     private var disposable = CompositeDisposable()
+    private var page = 0
 
-    fun loadGallery() {
-        isLoading.set(true)
-        disposable.add( repository.getGallery()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith( object : DisposableObserver<ArrayList<Album>>() {
-
-                    override fun onComplete() {
-                        isLoading.set(false)
-                    }
-
-                    override fun onNext(data: ArrayList<Album>) {
-                        gallery.value = data
-                    }
-
-                    override fun onError(e: Throwable) {
-                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                    }
-
-                }))
-    }
-
-    fun reloadGallery() {
-        clearGallery()
+    fun refreshGallery() {
+        gallery.clear()
         loadGallery()
     }
 
-    private fun clearGallery() {
-        gallery.value = null
+    fun loadGallery() {
+        isLoading.set(true)
+        disposable.add( repository.getGallery(page)
+                .subscribeOn(Schedulers.io())
+                .subscribe({ data: Album? ->
+                    gallery.add(data)
+                    Log.d("viewModelLogging", "data: $data")
+                }, { e: Throwable? ->
+                    Log.e("viewModelLogging", "loadGallery error: $e")
+                }, {
+                    isLoading.set(false)
+                }))
     }
 
     override fun onCleared() {
 
         if (!disposable.isDisposed) {
-            clearGallery()
+            gallery.clear()
             disposable.dispose()
         }
 

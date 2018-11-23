@@ -11,7 +11,7 @@ import com.example.burny.imbur.databinding.GalleryItemBinding
 
 class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>() {
 
-    private var items = arrayListOf<Album>()
+    private var items = ArrayList<Album>()
     private val set = ConstraintSet()
 
     fun replaceData(data: ArrayList<Album>) {
@@ -28,11 +28,11 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>() 
     override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
         val item = items[position]
 
-        with(set){
-            clone(holder.layout)
-            setDimensionRatio(holder.img.id, item.getCoverRatio())
-            applyTo(holder.layout)
-        }
+//        with(set){
+//            clone(holder.layout)
+//            setDimensionRatio(holder.img.id, item.getCoverRatio())
+//            applyTo(holder.layout)
+//        }
 
         holder.bind(item)
     }

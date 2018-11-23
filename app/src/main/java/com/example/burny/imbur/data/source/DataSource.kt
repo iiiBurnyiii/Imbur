@@ -1,12 +1,13 @@
 package com.example.burny.imbur.data.source
 
 import com.example.burny.imbur.data.Album
-import io.reactivex.Observable
+import io.reactivex.Flowable
+import io.reactivex.Single
 
 interface DataSource {
 
-    fun getGallery(): Observable<ArrayList<Album>>
+    fun getGallery(page: Int): Flowable<Album>
 
-    fun getAlbum(id: String): Observable<Album>
+    fun getAlbum(id: String): Single<Album>
 
 }
