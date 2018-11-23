@@ -13,5 +13,6 @@ interface BindingComponent : DataBindingComponent {
     override fun getImageBindingAdapter(): ImageBindingAdapter
     override fun getListBindingAdapter(): ListBindingAdapter
     override fun getTitleBindingAdapter(): TitleBindingAdapter
+    override fun getDimensionRatioBindingAdapter(): DimensionRatioBindingAdapter
 
 }

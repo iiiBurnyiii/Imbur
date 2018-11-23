@@ -1,17 +1,26 @@
 package com.example.burny.imbur.bindingAdapters
 
+import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import com.example.burny.imbur.R
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.example.burny.imbur.utils.GlideApp
 
 class ImageBindingAdapter {
 
-    @BindingAdapter("imgUrl")
-    fun ImageView.setImage(url: String) {
+    @BindingAdapter("imgUrl", "error")
+    fun ImageView.setImage(url: String, errorDrawable: Drawable) {
+        val circularProgressDrawable = CircularProgressDrawable(this.context)
+
+        with(circularProgressDrawable) {
+            strokeWidth = 5f
+            centerRadius = 30f
+            start()
+        }
+
         GlideApp.with(context).load(url)
-                .placeholder(R.drawable.ic_image)
-                .error(R.drawable.ic_broken_image)
+                .placeholder(circularProgressDrawable)
+                .error(errorDrawable)
                 .into(this)
     }
 

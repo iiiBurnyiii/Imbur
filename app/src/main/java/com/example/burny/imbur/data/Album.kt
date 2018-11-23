@@ -7,8 +7,8 @@ data class Album(
         val title: String,
         val cover: String,
         val datetime: Long,
-        val coverWidth: Int,
-        val coverHeight: Int,
+        val cover_width: Int,
+        val cover_height: Int,
         val views: Int,
         val link: String,
         val ups: Int,
@@ -16,13 +16,13 @@ data class Album(
         val points: Int,
         val score: Int,
         val is_album: Boolean,
-        val favoriteCount: Int,
-        val commentCount: Int,
+        val favorite_count: Int,
+        val comment_count: Int,
         val comments: ArrayList<Comment>,
         val images: ArrayList<Image>
 ) {
 
-    fun getCoverRatio() = "$coverWidth:$coverHeight"
+    fun getCoverDimensionRatio() = "$cover_width:$cover_height"
 
     fun getCoverUrl(): String {
         return if (is_album) {

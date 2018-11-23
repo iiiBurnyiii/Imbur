@@ -19,4 +19,8 @@ class BindingModule {
     @Scopes.DataBindingScope
     fun provideListAdapter() = ListBindingAdapter()
 
+    @Provides
+    @Scopes.DataBindingScope
+    fun provideDimensionRatioAdapter() = DimensionRatioBindingAdapter()
+
 }
