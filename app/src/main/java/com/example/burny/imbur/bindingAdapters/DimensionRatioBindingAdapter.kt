@@ -1,5 +1,6 @@
 package com.example.burny.imbur.bindingAdapters
 
+import android.util.Log
 import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -22,6 +23,8 @@ class DimensionRatioBindingAdapter {
                 setDimensionRatio(this@setDimensionRatio.id, dimensionRatio)
                 applyTo(layout)
             }
+        } else {
+            Log.e("dimensionRatioLogging", "setDimensionRation error, layout = $layout")
         }
     }
 

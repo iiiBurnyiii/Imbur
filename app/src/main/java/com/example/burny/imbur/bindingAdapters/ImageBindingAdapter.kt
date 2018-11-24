@@ -10,8 +10,8 @@ class ImageBindingAdapter {
 
     @BindingAdapter("imgUrl", "error")
     fun ImageView.setImage(url: String, errorDrawable: Drawable) {
-        val circularProgressDrawable = CircularProgressDrawable(this.context)
 
+        val circularProgressDrawable = CircularProgressDrawable(this.context)
         with(circularProgressDrawable) {
             strokeWidth = 5f
             centerRadius = 30f
@@ -21,6 +21,7 @@ class ImageBindingAdapter {
         GlideApp.with(context).load(url)
                 .placeholder(circularProgressDrawable)
                 .error(errorDrawable)
+                .fitCenter()
                 .into(this)
     }
 
