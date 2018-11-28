@@ -1,7 +1,7 @@
 package com.example.burny.imbur.data
 
 
-data class Album(
+data class Album (
         val id: String,
         val author: String,
         val title: String,
@@ -25,8 +25,12 @@ data class Album(
 ) {
 
     fun getCoverDimensionRatio() =
-            if (is_album) "$cover_width:$cover_height" else "$width:$height"
+            if (is_album)
+                "$cover_width:${if (cover_height >= 1080) 1080 else cover_height}"
+            else
+                "$width:${if (height >= 1080) 1080 else height}"
 
     fun getCoverUrl() =
             if (is_album) images[0].link else link
+
 }

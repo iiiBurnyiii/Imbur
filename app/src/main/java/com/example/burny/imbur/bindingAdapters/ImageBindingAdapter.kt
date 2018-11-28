@@ -21,7 +21,6 @@ class ImageBindingAdapter {
         GlideApp.with(context).load(url)
                 .placeholder(circularProgressDrawable)
                 .error(errorDrawable)
-                .fitCenter()
                 .into(this)
     }
 

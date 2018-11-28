@@ -9,6 +9,6 @@ abstract class RepositiryModule {
 
     @Binds
     @Singleton
-    abstract fun bindGalleryRepository(repository: GalleryRepository): DataSource
+    abstract fun bindGalleryRepository(repository: GalleryRepository): IGalleryRepository
 
 }

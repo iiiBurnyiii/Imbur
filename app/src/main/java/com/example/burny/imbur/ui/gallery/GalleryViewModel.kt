@@ -32,7 +32,7 @@ class GalleryViewModel @Inject constructor (val repository: GalleryRepository) :
                     Log.d("viewModelLogging", "data: $data")
                 }, { e: Throwable? ->
                     Log.e("viewModelLogging", "loadGallery error: $e")
-                }, {
+                }, { //onComplete
                     isLoading.set(false)
                 }))
     }

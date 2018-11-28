@@ -8,15 +8,12 @@ import javax.inject.Inject
 
 class GalleryRepository @Inject constructor(
         val remoteGalleryDataSource: RemoteGalleryDataSource
-) : DataSource {
+) : IGalleryRepository {
 
     override fun getGallery(page: Int): Flowable<Album> {
         return remoteGalleryDataSource.requestGallery(page).flattenAsFlowable { gallery ->
             gallery.data
         }
-//        return CachedDataSource().getGallery().flattenAsFlowable { gallery ->
-//            gallery.data
-//        }
     }
 
     override fun getAlbum(id: String): Single<Album> {
