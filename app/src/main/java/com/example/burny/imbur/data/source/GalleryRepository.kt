@@ -1,17 +1,17 @@
 package com.example.burny.imbur.data.source
 
 import com.example.burny.imbur.data.Album
-import com.example.burny.imbur.data.source.remote.RemoteGalleryDataSource
+import com.example.burny.imbur.data.source.remote.ImgurApi
 import io.reactivex.Flowable
 import io.reactivex.Single
 import javax.inject.Inject
 
 class GalleryRepository @Inject constructor(
-        val remoteGalleryDataSource: RemoteGalleryDataSource
+        val api: ImgurApi
 ) : IGalleryRepository {
 
     override fun getGallery(page: Int): Flowable<Album> {
-        return remoteGalleryDataSource.requestGallery(page).flattenAsFlowable { gallery ->
+        return api.requestHotGallery(page).flattenAsFlowable { gallery ->
             gallery.data
         }
     }
