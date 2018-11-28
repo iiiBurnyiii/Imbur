@@ -1,4 +1,4 @@
-package com.example.burny.imbur.bindingAdapters
+package com.example.burny.imbur.ui.bindingAdapters
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
@@ -6,8 +6,9 @@ import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.example.burny.imbur.utils.GlideApp
 
-class ImageBindingAdapter {
+object ImageBindingAdapter {
 
+    @JvmStatic
     @BindingAdapter("imgUrl", "error")
     fun ImageView.setImage(url: String, errorDrawable: Drawable) {
 

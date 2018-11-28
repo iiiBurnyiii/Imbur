@@ -1,10 +1,11 @@
-package com.example.burny.imbur.bindingAdapters
+package com.example.burny.imbur.ui.bindingAdapters
 
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 
-class TitleBindingAdapter {
+object TitleBindingAdapter {
 
+    @JvmStatic
     @BindingAdapter("title")
     fun TextView.setTrimTitle(title: String) {
         this.text = when (title.length <= 60) {

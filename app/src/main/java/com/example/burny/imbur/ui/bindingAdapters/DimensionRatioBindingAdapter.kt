@@ -1,4 +1,4 @@
-package com.example.burny.imbur.bindingAdapters
+package com.example.burny.imbur.ui.bindingAdapters
 
 import android.util.Log
 import android.view.View
@@ -6,8 +6,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.BindingAdapter
 
-class DimensionRatioBindingAdapter {
+object DimensionRatioBindingAdapter {
 
+    @JvmStatic
     @BindingAdapter("dimensionRatio")
     fun View.setDimensionRatio(dimensionRatio: String) {
         val viewParent = this.parent
