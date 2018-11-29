@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.burny.imbur.data.to.Album
 import com.example.burny.imbur.databinding.GalleryFragmentBinding
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -36,13 +39,16 @@ class GalleryFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        setupAdapter()
+        initAdapter()
     }
 
-    private fun setupAdapter() =
-            with(binding.rvGallery) {
-                layoutManager = StaggeredGridLayoutManager(2, 1)
-                adapter = galleryAdapter
+    private fun initAdapter() =
+            with(binding) {
+                rvGallery.layoutManager = StaggeredGridLayoutManager(2, 1)
+                rvGallery.adapter = galleryAdapter
+                viewModel?.galleryList?.observe(this@GalleryFragment, Observer { data: PagedList<Album>? ->
+                    data?.let { galleryAdapter.submitList(data) }
+                })
             }
 
     companion object {

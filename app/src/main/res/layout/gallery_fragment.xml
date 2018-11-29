@@ -21,15 +21,11 @@
             android:id="@+id/rvGallery"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="4dp"
-            app:items="@{viewModel.gallery}"
-            android:visibility="@{viewModel.isLoading ? View.GONE : View.VISIBLE}"
+            android:visibility="@{View.VISIBLE}"
             tools:itemCount="10"
-            tools:layoutManager="GridLayoutManager"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="28dp"
-            tools:listitem="@layout/gallery_item"
-            tools:spanCount="2">
+            tools:listitem="@layout/gallery_item">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -40,7 +36,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:visibility="@{viewModel.isLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="@{View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/rvGallery"
             app:layout_constraintStart_toStartOf="@+id/rvGallery"
@@ -52,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:clickable="@{viewModel.isLoading ? false : true}"
+            android:clickable="@{true}"
             android:onClick="@{() -> viewModel.refreshGallery()}"
             android:src="@drawable/ic_refresh"
             android:tint="@android:color/background_light"

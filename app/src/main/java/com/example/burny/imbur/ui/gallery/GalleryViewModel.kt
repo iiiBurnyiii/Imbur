@@ -1,49 +1,37 @@
 package com.example.burny.imbur.ui.gallery
 
-import android.util.Log
-import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableBoolean
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import com.example.burny.imbur.data.Album
-import com.example.burny.imbur.data.source.GalleryRepository
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
+import com.example.burny.imbur.data.GalleryDataSourceFactory
+import com.example.burny.imbur.data.to.Album
 import javax.inject.Inject
 
-class GalleryViewModel @Inject constructor (val repository: GalleryRepository) : ViewModel() {
+class GalleryViewModel @Inject constructor (
+        sourceFactory: GalleryDataSourceFactory
+) : ViewModel() {
 
-    val isLoading = ObservableBoolean(false)
-    var gallery = ObservableArrayList<Album>()
+    var galleryList: LiveData<PagedList<Album>>
 
-    private var disposable = CompositeDisposable()
-    private var page = 0
+    private val pageSize = 20
+
+    init {
+        val pagedListConfig = PagedList.Config.Builder()
+                .setPageSize(pageSize)
+                .setInitialLoadSizeHint(pageSize * 2)
+                .setEnablePlaceholders(false)
+                .build()
+        galleryList = LivePagedListBuilder<Int, Album>(sourceFactory, pagedListConfig).build()
+    }
 
     fun refreshGallery() {
-        gallery.clear()
-        loadGallery()
     }
 
     fun loadGallery() {
-        isLoading.set(true)
-        disposable.add( repository.getGallery(page)
-                .subscribeOn(Schedulers.io())
-                .subscribe({ data: Album? ->
-                    gallery.add(data)
-                    Log.d("viewModelLogging", "data: $data")
-                }, { e: Throwable? ->
-                    Log.e("viewModelLogging", "loadGallery error: $e")
-                }, { //onComplete
-                    isLoading.set(false)
-                }))
     }
 
     override fun onCleared() {
-
-        if (!disposable.isDisposed) {
-            gallery.clear()
-            disposable.dispose()
-        }
-
         super.onCleared()
     }
 

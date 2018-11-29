@@ -2,18 +2,15 @@ package com.example.burny.imbur.ui.gallery
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.burny.imbur.data.Album
+import com.example.burny.imbur.data.to.Album
 import com.example.burny.imbur.databinding.GalleryItemBinding
+import javax.inject.Inject
 
-class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>() {
-
-    private var items = ArrayList<Album>()
-
-    fun replaceData(data: ArrayList<Album>) {
-        items = data
-        notifyDataSetChanged()
-    }
+class GalleryAdapter @Inject constructor ():
+        PagedListAdapter<Album, GalleryAdapter.GalleryViewHolder>(diffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -22,17 +19,23 @@ class GalleryAdapter : RecyclerView.Adapter<GalleryAdapter.GalleryViewHolder>() 
     }
 
     override fun onBindViewHolder(holder: GalleryViewHolder, position: Int) {
-        val item = items[position]
-
-        holder.bind(item)
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int =
-            items.size
+    companion object {
+        val diffCallback = object : DiffUtil.ItemCallback<Album>() {
+            override fun areItemsTheSame(oldItem: Album, newItem: Album): Boolean =
+                    oldItem.id == newItem.id
+
+            override fun areContentsTheSame(oldItem: Album, newItem: Album): Boolean =
+                    oldItem == newItem
+
+        }
+    }
 
     inner class GalleryViewHolder(private val binding: GalleryItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(album: Album) {
+        fun bind(album: Album?) {
             binding.album = album
             binding.executePendingBindings()
         }

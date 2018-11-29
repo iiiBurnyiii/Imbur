@@ -8,8 +8,4 @@ class Scopes {
     @Retention(AnnotationRetention.RUNTIME)
     annotation class GalleryScope
 
-    @Scope
-    @Retention(AnnotationRetention.RUNTIME)
-    annotation class DataBindingScope
-
 }
