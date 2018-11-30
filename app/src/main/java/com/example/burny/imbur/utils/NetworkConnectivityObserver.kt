@@ -11,14 +11,14 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class NetworkStateObserver @Inject constructor (
+class NetworkConnectivityObserver @Inject constructor (
         val context: Context
 ) : LiveData<Boolean>() {
 
-    private var networkStateDisposable: Disposable? = null
+    private var networkDisposable: Disposable? = null
 
     override fun onActive() {
-        networkStateDisposable =
+        networkDisposable =
                 ReactiveNetwork.observeNetworkConnectivity(context.applicationContext)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -29,7 +29,7 @@ class NetworkStateObserver @Inject constructor (
     }
 
     override fun onInactive() {
-        safelyDispose(networkStateDisposable)
+        safelyDispose(networkDisposable)
     }
 
     private fun safelyDispose(disposable: Disposable?) {

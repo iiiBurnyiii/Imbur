@@ -1,4 +1,4 @@
-package com.example.burny.imbur.data.to
+package com.example.burny.imbur.data
 
 
 data class Album (

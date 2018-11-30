@@ -9,9 +9,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.burny.imbur.data.to.Album
+import com.example.burny.imbur.data.Album
 import com.example.burny.imbur.databinding.GalleryFragmentBinding
-import com.example.burny.imbur.utils.NetworkStateObserver
+import com.example.burny.imbur.utils.NetworkConnectivityObserver
 import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class GalleryFragment : DaggerFragment() {
 
     @Inject lateinit var galleryAdapter: GalleryAdapter
     @Inject lateinit var factory: ViewModelProvider.Factory
-    @Inject lateinit var networkStateObserver: NetworkStateObserver
+    @Inject lateinit var networkConnectivityObserver: NetworkConnectivityObserver
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -56,22 +56,19 @@ class GalleryFragment : DaggerFragment() {
             }
 
     private fun onNetworkDisconnect() {
-
         val networkSnackbar = Snackbar.make(
                 binding.root,
                 "Please check your internet connection",
                 Snackbar.LENGTH_INDEFINITE
         )
 
-        networkStateObserver.observe(this, Observer { internetIsAvailable ->
+        networkConnectivityObserver.observe(this, Observer { internetIsAvailable ->
             if (internetIsAvailable != true) {
                 networkSnackbar.show()
             } else {
                 networkSnackbar.dismiss()
             }
         })
-
-
     }
 
     companion object {

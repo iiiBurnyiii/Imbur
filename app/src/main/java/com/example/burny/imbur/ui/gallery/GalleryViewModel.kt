@@ -5,13 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.example.burny.imbur.data.GalleryDataSourceFactory
-import com.example.burny.imbur.data.to.Album
+import com.example.burny.imbur.data.Album
+import com.example.burny.imbur.data.source.GalleryDataSourceFactory
+import io.reactivex.disposables.CompositeDisposable
 import java.util.concurrent.Executors
 import javax.inject.Inject
+import javax.inject.Named
 
 class GalleryViewModel @Inject constructor (
-        sourceFactory: GalleryDataSourceFactory
+        sourceFactory: GalleryDataSourceFactory,
+        @Named("GalleryCompositeDisposable")
+        val compositeDisposable: CompositeDisposable
 ) : ViewModel() {
 
     val galleryList: LiveData<PagedList<Album>>
@@ -37,6 +41,9 @@ class GalleryViewModel @Inject constructor (
     }
 
     override fun onCleared() {
+        if (!compositeDisposable.isDisposed) {
+            compositeDisposable.dispose()
+        }
         super.onCleared()
     }
 

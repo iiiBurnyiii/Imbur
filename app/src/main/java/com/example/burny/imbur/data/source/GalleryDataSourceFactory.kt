@@ -1,12 +1,12 @@
-package com.example.burny.imbur.data
+package com.example.burny.imbur.data.source
 
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
-import com.example.burny.imbur.data.to.Album
+import com.example.burny.imbur.data.Album
+import com.example.burny.imbur.di.Scopes
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@Scopes.GalleryScope
 class GalleryDataSourceFactory @Inject constructor (
         val source: GalleryDataSource
 ) : DataSource.Factory<Int, Album>() {

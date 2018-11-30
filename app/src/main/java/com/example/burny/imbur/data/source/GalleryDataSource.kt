@@ -1,20 +1,21 @@
-package com.example.burny.imbur.data
+package com.example.burny.imbur.data.source
 
 import android.util.Log
 import androidx.paging.PageKeyedDataSource
+import com.example.burny.imbur.data.Album
 import com.example.burny.imbur.data.remote.ImgurApi
-import com.example.burny.imbur.data.to.Album
+import com.example.burny.imbur.di.Scopes
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.plusAssign
 import javax.inject.Inject
-import javax.inject.Singleton
+import javax.inject.Named
 
-@Singleton
+@Scopes.GalleryScope
 class GalleryDataSource @Inject constructor (
-        val api: ImgurApi
+        val api: ImgurApi,
+        @Named("GalleryCompositeDisposable")
+        val compositeDisposable: CompositeDisposable
 ) : PageKeyedDataSource<Int, Album>() {
-
-    private val compositeDisposable = CompositeDisposable()
 
     private var requestPage = 0
 

@@ -1,7 +1,7 @@
 package com.example.burny.imbur.data.remote
 
 import android.util.Log
-import com.example.burny.imbur.data.to.Gallery
+import com.example.burny.imbur.data.Gallery
 import com.example.burny.imbur.utils.Constants
 import io.reactivex.Single
 import okhttp3.OkHttpClient

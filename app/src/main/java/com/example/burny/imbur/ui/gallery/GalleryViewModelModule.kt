@@ -1,23 +1,19 @@
-package com.example.burny.imbur.ui.vmFactory
+package com.example.burny.imbur.ui.gallery
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import com.example.burny.imbur.di.Scopes
 import com.example.burny.imbur.di.ViewModelKey
-import com.example.burny.imbur.ui.gallery.GalleryViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 
 @Module
-abstract class ViewModelsModule {
-
-    @Binds
-    abstract fun bindFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+abstract class GalleryViewModelModule {
 
     @Binds
     @IntoMap
+    @Scopes.GalleryScope
     @ViewModelKey(GalleryViewModel::class)
     abstract fun bindGalleryViewModel(galleryViewModel: GalleryViewModel): ViewModel
 
 }
-
