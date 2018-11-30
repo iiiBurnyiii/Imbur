@@ -11,7 +11,7 @@ import javax.inject.Singleton
 
 @Singleton
 class GalleryDataSource @Inject constructor (
-        var api: ImgurApi
+        val api: ImgurApi
 ) : PageKeyedDataSource<Int, Album>() {
 
     private val compositeDisposable = CompositeDisposable()
@@ -26,8 +26,7 @@ class GalleryDataSource @Inject constructor (
                     callback.onResult(gallery.data, null, requestPage++)
                 },
                 { e: Throwable ->
-                    requestPage = 0
-                    Log.e("DataSourceLogger", "initial load error: $e")
+                    Log.e("DataSourceLogger", "init load error: $e")
                 }
         )
 
@@ -41,8 +40,7 @@ class GalleryDataSource @Inject constructor (
                     callback.onResult(gallery.data, requestPage++)
                 },
                 { e: Throwable ->
-                    requestPage = 0
-                    Log.e("DataSourceLogger", "load after error: $e")
+                    Log.e("DataSourceLogger", "load error on ${requestPage - 1} page \n error: $e")
                 }
         )
 

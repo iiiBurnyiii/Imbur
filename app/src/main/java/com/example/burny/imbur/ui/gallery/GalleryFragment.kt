@@ -11,6 +11,8 @@ import androidx.paging.PagedList
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.burny.imbur.data.to.Album
 import com.example.burny.imbur.databinding.GalleryFragmentBinding
+import com.example.burny.imbur.utils.NetworkStateObserver
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
@@ -20,6 +22,8 @@ class GalleryFragment : DaggerFragment() {
 
     @Inject lateinit var galleryAdapter: GalleryAdapter
     @Inject lateinit var factory: ViewModelProvider.Factory
+    @Inject lateinit var networkStateObserver: NetworkStateObserver
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -38,7 +42,7 @@ class GalleryFragment : DaggerFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+        onNetworkDisconnect()
         initAdapter()
     }
 
@@ -50,6 +54,25 @@ class GalleryFragment : DaggerFragment() {
                     data?.let { galleryAdapter.submitList(data) }
                 })
             }
+
+    private fun onNetworkDisconnect() {
+
+        val networkSnackbar = Snackbar.make(
+                binding.root,
+                "Please check your internet connection",
+                Snackbar.LENGTH_INDEFINITE
+        )
+
+        networkStateObserver.observe(this, Observer { internetIsAvailable ->
+            if (internetIsAvailable != true) {
+                networkSnackbar.show()
+            } else {
+                networkSnackbar.dismiss()
+            }
+        })
+
+
+    }
 
     companion object {
         fun newInstance() = GalleryFragment()

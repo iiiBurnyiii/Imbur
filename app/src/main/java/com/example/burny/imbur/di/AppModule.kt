@@ -11,7 +11,7 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideContext(application: ImburApplication): Context =
+    fun provideApplicationContext(application: ImburApplication): Context =
             application.applicationContext
 
 }

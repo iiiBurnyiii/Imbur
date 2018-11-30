@@ -1,20 +1,23 @@
 package com.example.burny.imbur.ui.gallery
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.example.burny.imbur.data.GalleryDataSourceFactory
 import com.example.burny.imbur.data.to.Album
+import java.util.concurrent.Executors
 import javax.inject.Inject
 
 class GalleryViewModel @Inject constructor (
         sourceFactory: GalleryDataSourceFactory
 ) : ViewModel() {
 
-    var galleryList: LiveData<PagedList<Album>>
+    val galleryList: LiveData<PagedList<Album>>
+    val snackbarMessage = MutableLiveData<String>()
 
-    private val pageSize = 20
+    private val pageSize = 15
 
     init {
         val pagedListConfig = PagedList.Config.Builder()
@@ -22,7 +25,9 @@ class GalleryViewModel @Inject constructor (
                 .setInitialLoadSizeHint(pageSize * 2)
                 .setEnablePlaceholders(false)
                 .build()
-        galleryList = LivePagedListBuilder<Int, Album>(sourceFactory, pagedListConfig).build()
+        galleryList = LivePagedListBuilder<Int, Album>(sourceFactory, pagedListConfig)
+                .setFetchExecutor(Executors.newSingleThreadExecutor())
+                .build()
     }
 
     fun refreshGallery() {

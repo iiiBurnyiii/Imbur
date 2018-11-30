@@ -19,6 +19,7 @@ import javax.inject.Singleton
 ])
 interface AppComponent : AndroidInjector<ImburApplication> {
 
-    override fun inject(instance: ImburApplication?)
+    @Component.Builder
+    abstract class Buildet : AndroidInjector.Builder<ImburApplication>()
 
 }
