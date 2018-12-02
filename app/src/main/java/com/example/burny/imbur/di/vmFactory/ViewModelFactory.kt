@@ -1,4 +1,4 @@
-package com.example.burny.imbur.ui.vmFactory
+package com.example.burny.imbur.di.vmFactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,6 +8,7 @@ import javax.inject.Provider
 class ViewModelFactory @Inject constructor (val viewModels: MutableMap<Class<out ViewModel>, Provider<ViewModel>>)
     : ViewModelProvider.Factory {
 
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T =
             viewModels[modelClass]?.get() as T
 

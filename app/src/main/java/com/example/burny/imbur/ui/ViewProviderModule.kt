@@ -1,9 +1,9 @@
 package com.example.burny.imbur.ui
 
 import com.example.burny.imbur.di.Scopes
+import com.example.burny.imbur.di.gallery.GalleryFragmentModule
+import com.example.burny.imbur.di.gallery.GalleryViewModelModule
 import com.example.burny.imbur.ui.gallery.GalleryFragment
-import com.example.burny.imbur.ui.gallery.GalleryFragmentModule
-import com.example.burny.imbur.ui.gallery.GalleryViewModelModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

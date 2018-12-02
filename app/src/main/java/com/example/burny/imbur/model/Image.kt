@@ -1,4 +1,4 @@
-package com.example.burny.imbur.data
+package com.example.burny.imbur.model
 
 data class Image (
         val id: String,

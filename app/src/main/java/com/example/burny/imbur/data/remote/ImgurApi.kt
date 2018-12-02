@@ -1,8 +1,7 @@
 package com.example.burny.imbur.data.remote
 
 import android.util.Log
-import com.example.burny.imbur.data.Gallery
-import com.example.burny.imbur.utils.Constants
+import com.example.burny.imbur.model.Gallery
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -19,6 +18,9 @@ interface ImgurApi {
                        @Path("page") page: Int): Single<Gallery>
 
     companion object {
+        private const val CLIENT_ID = "7ff93026edca660"
+        private const val BASE_URL = "https://api.imgur.com/3/"
+
         fun create(): ImgurApi {
             val logger = HttpLoggingInterceptor(HttpLoggingInterceptor.Logger {
                 Log.d("ApiLogger", it)
@@ -31,7 +33,7 @@ interface ImgurApi {
                         val original = chain.request()
 
                         val request = original.newBuilder()
-                                .header("Authorization", "Client-ID ${Constants.CLIENT_ID}")
+                                .header("Authorization", "Client-ID ${CLIENT_ID}")
                                 .method(original.method(), original.body())
                                 .build()
 
@@ -40,7 +42,7 @@ interface ImgurApi {
                     .build()
 
             return Retrofit.Builder()
-                    .baseUrl(Constants.IMGUR_URL)
+                    .baseUrl(BASE_URL)
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(client)
                     .addConverterFactory(GsonConverterFactory.create())

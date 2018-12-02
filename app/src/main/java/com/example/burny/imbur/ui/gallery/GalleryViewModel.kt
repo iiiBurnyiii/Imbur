@@ -1,43 +1,41 @@
 package com.example.burny.imbur.ui.gallery
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations.map
+import androidx.lifecycle.Transformations.switchMap
 import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import com.example.burny.imbur.data.Album
-import com.example.burny.imbur.data.source.GalleryDataSourceFactory
+import com.example.burny.imbur.data.GalleryRepository
 import io.reactivex.disposables.CompositeDisposable
-import java.util.concurrent.Executors
 import javax.inject.Inject
 import javax.inject.Named
 
 class GalleryViewModel @Inject constructor (
-        sourceFactory: GalleryDataSourceFactory,
+        val repository: GalleryRepository,
         @Named("GalleryCompositeDisposable")
         val compositeDisposable: CompositeDisposable
 ) : ViewModel() {
 
-    val galleryList: LiveData<PagedList<Album>>
-    val snackbarMessage = MutableLiveData<String>()
-
-    private val pageSize = 15
-
-    init {
-        val pagedListConfig = PagedList.Config.Builder()
-                .setPageSize(pageSize)
-                .setInitialLoadSizeHint(pageSize * 2)
-                .setEnablePlaceholders(false)
-                .build()
-        galleryList = LivePagedListBuilder<Int, Album>(sourceFactory, pagedListConfig)
-                .setFetchExecutor(Executors.newSingleThreadExecutor())
-                .build()
+    val sectionName = MutableLiveData<String>()
+    val result= map(sectionName) {
+        repository.galleryOfSection(it, 15)
     }
 
-    fun refreshGallery() {
+    val gallery = switchMap(result) {
+        it.pagedList
+    }!!
+    val loadState = switchMap(result) {
+        it.loadState
+    }!!
+    val refreshState = switchMap(result) {
+        it.refreshState
+    }!!
+
+    fun refresh() {
+        repository.refresh()
     }
 
-    fun loadGallery() {
+    fun retry() {
+        repository.retry()
     }
 
     override fun onCleared() {
@@ -45,6 +43,10 @@ class GalleryViewModel @Inject constructor (
             compositeDisposable.dispose()
         }
         super.onCleared()
+    }
+
+    companion object {
+        const val LOG_TAG = "ViewModelLogger"
     }
 
 }

@@ -2,8 +2,8 @@ package com.example.burny.imbur.di
 
 import com.example.burny.imbur.ImburApplication
 import com.example.burny.imbur.data.remote.ImgurApiModule
+import com.example.burny.imbur.di.vmFactory.ViewModelFactoryModule
 import com.example.burny.imbur.ui.ViewProviderModule
-import com.example.burny.imbur.ui.vmFactory.ViewModelFactoryModule
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
@@ -20,6 +20,6 @@ import javax.inject.Singleton
 interface AppComponent : AndroidInjector<ImburApplication> {
 
     @Component.Builder
-    abstract class Buildet : AndroidInjector.Builder<ImburApplication>()
+    abstract class Builder : AndroidInjector.Builder<ImburApplication>()
 
 }

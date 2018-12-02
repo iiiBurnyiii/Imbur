@@ -6,7 +6,7 @@
 
         <variable
             name="album"
-            type="com.example.burny.imbur.data.Album" />
+            type="com.example.burny.imbur.model.Album" />
 
     </data>
 

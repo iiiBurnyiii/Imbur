@@ -9,11 +9,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
-import com.example.burny.imbur.data.Album
 import com.example.burny.imbur.databinding.GalleryFragmentBinding
-import com.example.burny.imbur.utils.NetworkConnectivityObserver
-import com.google.android.material.snackbar.Snackbar
+import com.example.burny.imbur.model.Album
+import com.example.burny.imbur.utils.LoadState
 import dagger.android.support.DaggerFragment
+import kotlinx.android.synthetic.main.gallery_fragment.*
 import javax.inject.Inject
 
 class GalleryFragment : DaggerFragment() {
@@ -22,8 +22,8 @@ class GalleryFragment : DaggerFragment() {
 
     @Inject lateinit var galleryAdapter: GalleryAdapter
     @Inject lateinit var factory: ViewModelProvider.Factory
-    @Inject lateinit var networkConnectivityObserver: NetworkConnectivityObserver
 
+    private lateinit var viewModel: GalleryViewModel
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
@@ -32,46 +32,49 @@ class GalleryFragment : DaggerFragment() {
             viewModel = ViewModelProviders.of(this@GalleryFragment, factory)[GalleryViewModel::class.java]
         }
 
-        return binding.root
-    }
+        viewModel = binding.viewModel!!
 
-    override fun onResume() {
-        super.onResume()
-        binding.viewModel?.loadGallery()
+        viewModel.sectionName.postValue(DEFAULT_SECTION)
+
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        onNetworkDisconnect()
         initAdapter()
+        initSwipeToRefresh()
     }
 
-    private fun initAdapter() =
-            with(binding) {
-                rvGallery.layoutManager = StaggeredGridLayoutManager(2, 1)
-                rvGallery.adapter = galleryAdapter
-                viewModel?.galleryList?.observe(this@GalleryFragment, Observer { data: PagedList<Album>? ->
-                    data?.let { galleryAdapter.submitList(data) }
-                })
-            }
+    private fun initAdapter() {
+        with(rvGallery) {
+            layoutManager = StaggeredGridLayoutManager(2, 1)
+            adapter = galleryAdapter
+        }
 
-    private fun onNetworkDisconnect() {
-        val networkSnackbar = Snackbar.make(
-                binding.root,
-                "Please check your internet connection",
-                Snackbar.LENGTH_INDEFINITE
-        )
+        viewModel.gallery.observe(this, Observer { data: PagedList<Album>? ->
+            data?.let { galleryAdapter.submitList(data) }
+        })
 
-        networkConnectivityObserver.observe(this, Observer { internetIsAvailable ->
-            if (internetIsAvailable != true) {
-                networkSnackbar.show()
-            } else {
-                networkSnackbar.dismiss()
+        viewModel.loadState.observe(this, Observer {
+            if (it == LoadState.ERROR) {
+                viewModel.retry()
             }
         })
     }
 
+    private fun initSwipeToRefresh() {
+        viewModel.refreshState.observe(this, Observer {
+            swipeRefresh.isRefreshing = it == LoadState.LOADING
+        })
+        swipeRefresh.setOnRefreshListener {
+            viewModel.refresh()
+        }
+    }
+
     companion object {
+        const val TAG = "GalleryFragmentLogger"
+        const val DEFAULT_SECTION = "hot"
+
         fun newInstance() = GalleryFragment()
     }
 

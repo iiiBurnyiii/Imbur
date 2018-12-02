@@ -1,4 +1,4 @@
-package com.example.burny.imbur.ui.vmFactory
+package com.example.burny.imbur.di.vmFactory
 
 import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
