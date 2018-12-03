@@ -6,6 +6,6 @@ import com.example.burny.imbur.utils.LoadState
 
 data class Listing<T> (
         val pagedList: LiveData<PagedList<T>>,
-        val loadState: LiveData<LoadState>,
-        val refreshState: LiveData<LoadState>
+        val refreshState: LiveData<LoadState>,
+        val loadState: LiveData<LoadState>
 )

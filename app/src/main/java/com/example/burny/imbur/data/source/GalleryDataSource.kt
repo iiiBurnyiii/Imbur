@@ -6,76 +6,57 @@ import androidx.paging.PageKeyedDataSource
 import com.example.burny.imbur.data.remote.ImgurApi
 import com.example.burny.imbur.model.Album
 import com.example.burny.imbur.utils.LoadState
-import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity
 import io.reactivex.Completable
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Action
 import io.reactivex.rxkotlin.plusAssign
 import io.reactivex.schedulers.Schedulers
-import javax.inject.Inject
-import javax.inject.Named
 
-class GalleryDataSource @Inject constructor (
-        val api: ImgurApi,
-        val rxNetwork: Observable<Connectivity>,
-        @Named("GalleryCompositeDisposable")
-        val compositeDisposable: CompositeDisposable
+class GalleryDataSource(
+        private val section: String,
+        private val api: ImgurApi,
+        private val compositeDisposable: CompositeDisposable
 ) : PageKeyedDataSource<Int, Album>() {
 
-    private var retryCompletable: Completable? = null
-    private var requestPage = 0
-    var section = ""
-
-    val initLoadState = MutableLiveData<LoadState>()
+    val initState = MutableLiveData<LoadState>()
     val loadState = MutableLiveData<LoadState>()
+    var retryCompletable: Completable? = null
 
-    //
-    fun retryWhenConnect() {
+    private var requestPage = 0
+
+    fun retry() {
         retryCompletable?.let {
-            compositeDisposable += rxNetwork
-                    .switchMapCompletable { retryCompletable }
+            compositeDisposable += retryCompletable!!
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe( {  },
-                            { e ->
-                                Log.e(LOG_TAG, "Error in retryWhenConnect(): $e")
+                            {e ->
+                                Log.d(LOG_TAG, "Retry error: $e")
                             })
         }
     }
 
-    override fun invalidate() {
-        Log.d(LOG_TAG, "invalidate")
-        requestPage = 0
-        super.invalidate()
-    }
-
     override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, Album>) {
         Log.d(LOG_TAG, "Initial load, page: $requestPage")
-
+        initState.postValue(LoadState.LOADING)
         loadState.postValue(LoadState.LOADING)
-        initLoadState.postValue(LoadState.LOADING)
 
-        compositeDisposable += api.requestGallery("hot", requestPage).subscribe(
+        compositeDisposable += api.requestGallery(section, requestPage).subscribe(
                 { gallery ->
                     setRetry(null)
-
+                    initState.postValue(LoadState.LOADED)
                     loadState.postValue(LoadState.LOADED)
-                    initLoadState.postValue(LoadState.LOADED)
+
 
                     callback.onResult(gallery.data, null, ++requestPage)
                 },
                 { e: Throwable ->
                     Log.e(LOG_TAG, "Initial load error: $e")
-
-                    setRetry {
-                        loadInitial(params, callback)
-                    }
-
+                    initState.postValue(LoadState.ERROR)
                     loadState.postValue(LoadState.ERROR)
-                    initLoadState.postValue(LoadState.ERROR)
 
+                    setRetry { loadInitial(params, callback) }
                 }
         )
 
@@ -85,23 +66,18 @@ class GalleryDataSource @Inject constructor (
         Log.d(LOG_TAG, "Load $requestPage page")
         loadState.postValue(LoadState.LOADING)
 
-        compositeDisposable += api.requestGallery("hot", params.key).subscribe(
+        compositeDisposable += api.requestGallery(section, params.key).subscribe(
                 { gallery ->
                     setRetry(null)
-
                     loadState.postValue(LoadState.LOADED)
 
                     callback.onResult(gallery.data, ++requestPage)
                 },
                 { e: Throwable ->
                     Log.e(LOG_TAG, "Load error on page $requestPage \n error: $e")
-
-                    setRetry {
-                        loadAfter(params, callback)
-                    }
-
                     loadState.postValue(LoadState.ERROR)
 
+                    setRetry { loadAfter(params, callback) }
                 }
         )
 
@@ -112,11 +88,11 @@ class GalleryDataSource @Inject constructor (
     }
 
     private fun setRetry(action: (() -> Unit)?) {
-        retryCompletable = if (action == null) {
-            null
-        } else {
-            Completable.fromAction(Action(action))
-        }
+        retryCompletable = if (action != null) {
+                    Completable.fromAction(Action(action))
+                } else {
+                    null
+                }
     }
 
     companion object {

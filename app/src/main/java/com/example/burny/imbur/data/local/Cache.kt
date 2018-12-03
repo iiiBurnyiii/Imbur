@@ -1,6 +1,6 @@
 package com.example.burny.imbur.data.local
 
-class CachedDataSource {
+class Cache {
 
 //    fun getGallery(): Single<Gallery> {
 //        val albums = ArrayList<Album>()

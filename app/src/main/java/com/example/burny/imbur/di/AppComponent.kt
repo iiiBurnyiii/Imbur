@@ -1,7 +1,7 @@
 package com.example.burny.imbur.di
 
 import com.example.burny.imbur.ImburApplication
-import com.example.burny.imbur.data.remote.ImgurApiModule
+import com.example.burny.imbur.di.api.ImgurApiModule
 import com.example.burny.imbur.di.vmFactory.ViewModelFactoryModule
 import com.example.burny.imbur.ui.ViewProviderModule
 import dagger.Component

@@ -1,28 +1,27 @@
 package com.example.burny.imbur.utils
 
+import android.content.Context
 import android.util.Log
 import androidx.lifecycle.LiveData
-import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity
-import io.reactivex.Observable
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class NetworkConnectivityObserver @Inject constructor (
-        val rxNetwork: Observable<Connectivity>
+class NetworkAvailableLiveData @Inject constructor (
+        val context: Context
 ) : LiveData<Boolean>() {
 
     private var networkDisposable: Disposable? = null
 
     override fun onActive() {
-        networkDisposable =
-                rxNetwork.subscribeOn(Schedulers.io())
+        networkDisposable = ReactiveNetwork
+                .observeNetworkConnectivity(context.applicationContext)
+                .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe { connectivity ->
-                            Log.d("NetworkObserverLogger", "state: $connectivity")
+                            Log.d("ConnectivityLogger", "connectivity: $connectivity")
                             value = connectivity.available()
                         }
     }
