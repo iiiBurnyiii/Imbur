@@ -21,8 +21,8 @@ class GalleryDataSource(
 
     val initState = MutableLiveData<LoadState>()
     val loadState = MutableLiveData<LoadState>()
-    var retryCompletable: Completable? = null
 
+    private var retryCompletable: Completable? = null
     private var requestPage = 0
 
     fun retry() {
@@ -30,9 +30,9 @@ class GalleryDataSource(
             compositeDisposable += retryCompletable!!
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe( {  },
+                    .subscribe( { setRetry(null) },
                             {e ->
-                                Log.d(LOG_TAG, "Retry error: $e")
+                                Log.d(GalleryDataSource.LOG_TAG, "Retry error: $e")
                             })
         }
     }
@@ -48,8 +48,7 @@ class GalleryDataSource(
                     initState.postValue(LoadState.LOADED)
                     loadState.postValue(LoadState.LOADED)
 
-
-                    callback.onResult(gallery.data, null, ++requestPage)
+                    callback.onResult(gallery.data,null, ++requestPage)
                 },
                 { e: Throwable ->
                     Log.e(LOG_TAG, "Initial load error: $e")
@@ -87,12 +86,17 @@ class GalleryDataSource(
         //игнорирем, так как загружаем список с начала.
     }
 
+    override fun invalidate() {
+        super.invalidate()
+        Log.d(LOG_TAG, "invalidate()")
+    }
+
     private fun setRetry(action: (() -> Unit)?) {
-        retryCompletable = if (action != null) {
-                    Completable.fromAction(Action(action))
-                } else {
-                    null
-                }
+        retryCompletable = if (action == null) {
+            null
+        } else {
+            Completable.fromAction(Action(action))
+        }
     }
 
     companion object {

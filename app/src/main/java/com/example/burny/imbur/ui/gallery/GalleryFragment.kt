@@ -1,13 +1,16 @@
 package com.example.burny.imbur.ui.gallery
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.burny.imbur.databinding.GalleryFragmentBinding
+import com.example.burny.imbur.utils.LoadState
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.gallery_fragment.*
 import javax.inject.Inject
@@ -39,6 +42,10 @@ class GalleryFragment : DaggerFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initAdapter()
+        observeLoadError()
+        viewModel.gallery.observe(this, Observer {
+            Log.d(LOG_TAG, "gallery size: ${it.size}")
+        })
     }
 
     private fun initAdapter() {
@@ -47,6 +54,13 @@ class GalleryFragment : DaggerFragment() {
             adapter = galleryAdapter
         }
     }
+
+    private fun observeLoadError() =
+            viewModel.loadState.observe(this, Observer {
+                if (it == LoadState.ERROR) {
+                    viewModel.retry()
+                }
+            })
 
     companion object {
         const val LOG_TAG = "GalleryFragmentLogger"

@@ -69,19 +69,8 @@
                 android:layout_weight="1"
                 android:text="Please check yor internet connection."
                 android:textAlignment="center"
-                android:textSize="16sp"
-                android:textStyle="bold|italic" />
+                android:textSize="16sp" />
 
-            <Button
-                android:id="@+id/btnRetry"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Retry"
-                android:onClick="@{() -> viewModel.refresh()}"
-                android:textAppearance="@style/TextAppearance.AppCompat"
-                android:textSize="16sp"
-                tools:text="Retry" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
