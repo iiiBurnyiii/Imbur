@@ -3,9 +3,11 @@ package com.example.burny.imbur.data
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.Transformations.switchMap
+import androidx.paging.Config
 import androidx.paging.toLiveData
 import com.example.burny.imbur.data.remote.ImgurApi
 import com.example.burny.imbur.data.source.GalleryDataSourceFactory
+import com.example.burny.imbur.di.Scopes
 import com.example.burny.imbur.model.Album
 import com.github.pwittchen.reactivenetwork.library.rx2.Connectivity
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
@@ -16,6 +18,7 @@ import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
+@Scopes.GalleryScope
 class GalleryRepository @Inject constructor (
         val api: ImgurApi,
         val context: Application
@@ -29,20 +32,21 @@ class GalleryRepository @Inject constructor (
         sourceFactory = GalleryDataSourceFactory(
                 section = section,
                 api = api,
-                compositeDisposable = compositeDisposable
-        )
+                compositeDisposable = compositeDisposable)
 
         val livePagedList = sourceFactory.toLiveData(
-                pageSize = pageSize,
-                fetchExecutor = Executors.newSingleThreadExecutor()
-        )
+                config = Config(
+                        pageSize = pageSize,
+                        initialLoadSizeHint = pageSize * 2,
+                        enablePlaceholders = false),
+                fetchExecutor = Executors.newSingleThreadExecutor())
 
         return Listing (
-                pagedList = livePagedList,
-                loadState = switchMap(sourceFactory.sourceLiveData) {
+                galleryLiveData = livePagedList,
+                loadStatus = switchMap(sourceFactory.sourceLiveData) {
                     it.loadState
                 },
-                refreshState = switchMap(sourceFactory.sourceLiveData) {
+                refreshStatus = switchMap(sourceFactory.sourceLiveData) {
                     it.initState
                 })
     }

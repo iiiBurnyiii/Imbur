@@ -1,8 +1,7 @@
-package com.example.burny.imbur.ui
+package com.example.burny.imbur.di
 
-import com.example.burny.imbur.di.Scopes
-import com.example.burny.imbur.di.gallery.GalleryFragmentModule
 import com.example.burny.imbur.di.gallery.GalleryViewModelModule
+import com.example.burny.imbur.ui.MainActivity
 import com.example.burny.imbur.ui.gallery.GalleryFragment
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -11,10 +10,10 @@ import dagger.android.ContributesAndroidInjector
 abstract class ViewProviderModule {
 
     @ContributesAndroidInjector
-    abstract fun provideAppActivity(): AppActivity
+    abstract fun provideMainActivity(): MainActivity
 
     @Scopes.GalleryScope
-    @ContributesAndroidInjector(modules = [GalleryFragmentModule::class, GalleryViewModelModule::class])
+    @ContributesAndroidInjector(modules = [GalleryViewModelModule::class])
     abstract fun provideGalleryFragment(): GalleryFragment
 
 }

@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Imbur</string>
+    <string name="load_error">Please, check yor internet connection.</string>
 </resources>

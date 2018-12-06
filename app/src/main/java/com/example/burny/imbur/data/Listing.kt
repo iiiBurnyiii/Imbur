@@ -2,10 +2,10 @@ package com.example.burny.imbur.data
 
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
-import com.example.burny.imbur.utils.LoadState
+import com.example.burny.imbur.utils.LoadStatus
 
 data class Listing<T> (
-        val pagedList: LiveData<PagedList<T>>,
-        val refreshState: LiveData<LoadState>,
-        val loadState: LiveData<LoadState>
+        val galleryLiveData: LiveData<PagedList<T>>,
+        val refreshStatus: LiveData<LoadStatus>,
+        val loadStatus: LiveData<LoadStatus>
 )

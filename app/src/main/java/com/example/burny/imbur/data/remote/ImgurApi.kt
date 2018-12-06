@@ -33,7 +33,7 @@ interface ImgurApi {
                         val original = chain.request()
 
                         val request = original.newBuilder()
-                                .header("Authorization", "Client-ID ${CLIENT_ID}")
+                                .header("Authorization", "Client-ID $CLIENT_ID")
                                 .method(original.method(), original.body())
                                 .build()
 

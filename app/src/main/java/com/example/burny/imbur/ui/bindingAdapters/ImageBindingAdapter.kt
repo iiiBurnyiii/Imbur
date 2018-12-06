@@ -20,8 +20,9 @@ object ImageBindingAdapter {
         }
 
         GlideApp.with(context).load(url)
-                .placeholder(circularProgressDrawable)
                 .error(errorDrawable)
+                .placeholder(circularProgressDrawable)
+                .centerCrop()
                 .into(this)
     }
 

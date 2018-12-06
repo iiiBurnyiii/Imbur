@@ -5,7 +5,7 @@ import com.example.burny.imbur.R
 import com.example.burny.imbur.ui.gallery.GalleryFragment
 import dagger.android.support.DaggerAppCompatActivity
 
-class AppActivity : DaggerAppCompatActivity() {
+class MainActivity : DaggerAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

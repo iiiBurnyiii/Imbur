@@ -1,16 +1,15 @@
 package com.example.burny.imbur.ui.gallery
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.burny.imbur.databinding.GalleryFragmentBinding
-import com.example.burny.imbur.utils.LoadState
+import com.example.burny.imbur.utils.setupSnackbar
+import com.google.android.material.snackbar.Snackbar
 import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.gallery_fragment.*
 import javax.inject.Inject
@@ -22,30 +21,28 @@ class GalleryFragment : DaggerFragment() {
     @Inject lateinit var galleryAdapter: GalleryAdapter
     @Inject lateinit var factory: ViewModelProvider.Factory
 
-    private lateinit var viewModel: GalleryViewModel
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+                              savedInstanceState: Bundle?): View? {
+
         binding = GalleryFragmentBinding.inflate(inflater,
                 container, false).apply {
             viewModel = ViewModelProviders.of(this@GalleryFragment, factory)[GalleryViewModel::class.java]
             setLifecycleOwner(this@GalleryFragment)
         }
 
-        viewModel = binding.viewModel!!
-
-        viewModel.sectionName.postValue(DEFAULT_SECTION)
-
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         initAdapter()
-        observeLoadError()
-        viewModel.gallery.observe(this, Observer {
-            Log.d(LOG_TAG, "gallery size: ${it.size}")
-        })
+        binding.viewModel?.let { viewModel ->
+            viewModel.sectionName.value = DEFAULT_SECTION_NAME
+            viewModel.observeLoadStatus(this)
+            view?.setupSnackbar(this, viewModel.snackbarMessage, Snackbar.LENGTH_LONG)
+        }
+
     }
 
     private fun initAdapter() {
@@ -55,16 +52,8 @@ class GalleryFragment : DaggerFragment() {
         }
     }
 
-    private fun observeLoadError() =
-            viewModel.loadState.observe(this, Observer {
-                if (it == LoadState.ERROR) {
-                    viewModel.retry()
-                }
-            })
-
     companion object {
-        const val LOG_TAG = "GalleryFragmentLogger"
-        const val DEFAULT_SECTION = "hot"
+        const val DEFAULT_SECTION_NAME = "hot"
 
         fun newInstance() = GalleryFragment()
     }

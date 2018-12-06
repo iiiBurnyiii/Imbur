@@ -8,12 +8,12 @@ enum class Status {
 }
 
 @Suppress("DataClassPrivateConstructor")
-data class LoadState private constructor(
+data class LoadStatus private constructor(
         val status: Status
 ) {
     companion object {
-        val LOADED = LoadState(Status.SUCCESS)
-        val LOADING = LoadState(Status.RUNNING)
-        val ERROR = LoadState(Status.FAILED)
+        val LOADED = LoadStatus(Status.SUCCESS)
+        val LOADING = LoadStatus(Status.RUNNING)
+        val ERROR = LoadStatus(Status.FAILED)
     }
 }
